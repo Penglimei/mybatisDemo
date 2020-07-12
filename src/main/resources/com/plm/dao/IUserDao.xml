@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 有 IUserDao.java的映射文件，就不需要再写 dao的实现类-->
+
+<!-- namespace 属性的取值必须和 dao 接口的包结构相同-->
+<mapper namespace="com.plm.dao.IUserDao">
+    <!--
+        id 属性的取值必须是 dao接口的方法名
+        resultType 属性的取值为方法执行完后返回的结果封装到的位置
+     -->
+    <select id="findAll" resultType="com.plm.domain.User">
+        select * from user ;
+    </select>
+</mapper>
