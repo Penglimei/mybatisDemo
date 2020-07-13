@@ -23,7 +23,25 @@
         <environment id="mysql">
             <!-- 配置事物类型 -->
             <transactionManager type="JDBC"></transactionManager>
-            <!-- 配置数据源（连接池） -->
+            <!--
+                配置数据源（连接池）
+
+                连接池：
+                    减少获取链接所消耗的时间
+                Mybatis连接池：
+                    配置位置：
+                        SqlMaoConfig.xml中 dataSource标签的 type属性表示采用何种连接池的方式
+
+                        type属性取值：
+                            POOLED：采用传统的 javax.sql.DataSource规范中的连接池，MyBatis支持
+                                        ====》每次都是从池中获取一个连接使用，使用完再放回去
+                            UNPOOLED：没有使用池的思想
+                                        ====》每次都会创建一个连接
+                            JNDI：采用服务器提供的JNDI技术实现获取DataSource对象，不同服务器拿到DataSource对象不同
+                                    不是Web项目或者maven的war工程，无法使用
+                 MyBatis的事务：
+
+             -->
             <dataSource type="POOLED">
                 <!-- 配置连接数据库的4个基本信息 -->
                 <property name="driver" value="${jdbc.driver}"/>

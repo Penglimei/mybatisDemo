@@ -1,5 +1,6 @@
 package com.plm.dao;
 
+import com.plm.domain.QueryVo;
 import com.plm.domain.User;
 
 import java.util.List;
@@ -56,4 +57,18 @@ public interface IUserDao {
      * @return
      */
     int findTotal();
+
+    /**
+     * 根据传入的条件查询用户信息---->dao.xml中 where/if标签
+     * @param user
+     * @return
+     */
+    List<User> findUserByCondition(User user);
+
+    /**
+     *  根据 QueryVo 中提供的 id集合查询用户信息---->dao.xml中foreach标签
+     * @param queryVo
+     * @return
+     */
+    List<User> findUserInIds(QueryVo queryVo);
 }

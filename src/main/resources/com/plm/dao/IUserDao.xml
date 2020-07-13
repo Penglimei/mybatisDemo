@@ -81,4 +81,51 @@
     <select id="findTotal" resultType="java.lang.Integer">
         select count(id) from user;
     </select>
+    
+    <!-- 根据传入的条件查询用户信息 -->
+<!--    <select id="findUserByCondition"  resultType="com.plm.domain.User" parameterType="com.plm.domain.User">-->
+<!--        select * from user where 1=1-->
+<!--        <if test="username != null">-->
+<!--            and username = #{username}-->
+<!--        </if>-->
+<!--        <if test="sex != null">-->
+<!--            and sex = #{sex}-->
+<!--        </if>-->
+<!--    </select>-->
+    <select id="findUserByCondition"  resultType="com.plm.domain.User" parameterType="com.plm.domain.User">
+        select * from user
+        <where>
+            <if test="username != null">
+                and username = #{username}
+            </if>
+            <if test="sex != null">
+                and sex = #{sex}
+            </if>
+        </where>
+
+    </select>
+
+    <!--
+        根据 QueryVo 中提供的 id集合查询用户信息
+
+        foreach标签：
+             collection属性：代表要遍历的集合元素，不能用#{}
+             open属性：代表语句的开始部分
+             close属性：代表结束部分
+             item属性：代表遍历集合的每个元素，生成的变量名
+                #{uid} 的内容与 属性item="uid" 的相同
+             separator属性：代表分隔符
+
+     -->
+    <select id="findUserInIds" resultType="com.plm.domain.User" parameterType="com.plm.domain.QueryVo">
+        select * from user
+        <where>
+            <if test="ids != null and ids.size()>0">
+
+                <foreach collection="ids" open="and id in (" close=")" item="uid" separator=",">
+                    #{uid}
+                </foreach>
+            </if>
+        </where>
+    </select>
 </mapper>
