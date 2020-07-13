@@ -5,6 +5,18 @@
 
 <!-- mybatis的主配置文件 -->
 <configuration>
+    <!--
+        配置 properties
+            通过属性引用外部配置文件信息
+
+            resource属性：
+                用于指定配置文件的位置，是按照类路径的写法来写，并且必须存在于类路径下
+            url属性：
+                要求按照 url 的写法写地址
+                    eg : http://localhost:8080/xxxxxx/xx
+                          协议    主机      端口  URI
+    -->
+    <properties resource="jdbc.properties"></properties>
     <!--  配置环境  -->
     <environments default="mysql">
         <!-- 配置mysql的环境 -->
@@ -14,10 +26,10 @@
             <!-- 配置数据源（连接池） -->
             <dataSource type="POOLED">
                 <!-- 配置连接数据库的4个基本信息 -->
-                <property name="driver" value="com.mysql.jdbc.Driver"/>
-                <property name="url" value="jdbc:mysql://localhost:3306/db_mybatis"/>
-                <property name="username" value="root"/>
-                <property name="password" value="root"/>
+                <property name="driver" value="${jdbc.driver}"/>
+                <property name="url" value="${jdbc.url}"/>
+                <property name="username" value="${jdbc.username}"/>
+                <property name="password" value="${jdbc.password}"/>
             </dataSource>
         </environment>
     </environments>
