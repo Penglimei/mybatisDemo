@@ -7,11 +7,78 @@
 
 <!-- namespace 属性的取值必须和 dao 接口的包结构相同-->
 <mapper namespace="com.plm.dao.IUserDao">
+
     <!--
+        用于解决 实体类属性名 与 数据库表中字段名 不一致的问题
+
+           此时，<select> <update> <delete> <insert>标签不再需要 resultType属性，
+                而是需要 resultMap属性，并且resultMap="userMap"
+    -->
+<!--    <resultMap id="userMap" type="com.plm.domain.User">-->
+<!--        &lt;!&ndash; -->
+<!--            主键-->
+<!--                property属性  实体类中属性名-->
+<!--                column属性    数据库表中字段名-->
+<!--         &ndash;&gt;-->
+<!--        <id property="userid" column="id"></id>-->
+<!--        &lt;!&ndash; 其他非主属性 &ndash;&gt;-->
+<!--        <result property="userName" column="username"></result>-->
+<!--        <result property="userAddress" column="address"></result>-->
+<!--        <result property="userSex" column="sex"></result>-->
+<!--        <result property="userBirthday" column="birthday"></result>-->
+<!--    </resultMap>-->
+
+
+    <!--
+        查询所有
+
         id 属性的取值必须是 dao接口的方法名
         resultType 属性的取值为方法执行完后返回的结果封装到的位置
      -->
     <select id="findAll" resultType="com.plm.domain.User">
         select * from user ;
+    </select>
+
+    <!--
+        保存所有
+            通过反射将值存入数据库
+
+        parameterType 输入参数类型
+                        基本数据类型：int、string、long、Date;
+                        复杂数据类型：类（JavaBean、Integer等）和Map
+    -->
+    <insert id="saveUser" parameterType="com.plm.domain.User">
+        <!--
+            保存用户信息后，获取插入数据的 id
+
+            keyProperty     id 对应实体类的属性名称
+            keyColumn       id 对应数据库表的字段名称
+            resultType      返回结果集类型
+            order           什么时候执行
+        -->
+        <selectKey keyProperty="id" keyColumn="id" resultType="java.lang.Integer" order="AFTER">
+            select last_insert_id();
+        </selectKey>
+        insert into user(username, birthday, sex, address) values (#{username},#{birthday},#{sex},#{address});
+    </insert>
+
+    <!-- 根据id 更新用户 -->
+    <update id="updateUser" parameterType="com.plm.domain.User">
+        update user set username=#{username},address=#{address},sex=#{sex},birthday=#{birthday} where id=#{id};
+    </update>
+
+    <!-- 根据id 查找用户 -->
+    <select id="findById" parameterType="java.lang.Integer" resultType="com.plm.domain.User">
+        select * from user where id=#{uid};
+    </select>
+
+    <!-- 根据名称 模糊查询用户信息 -->
+    <select id="findByName" parameterType="java.lang.String" resultType="com.plm.domain.User">
+        select * from user where username like #{uname};
+    </select>
+
+    <!-- 查询总用户数目 -->
+    <select id="findTotal" resultType="java.lang.Integer">
+        select count(id) from user;
     </select>
 </mapper>
