@@ -17,9 +17,15 @@ import java.util.List;
 public interface IUserDao {
 
     /**
-     *  查询所有
+     *  查询所有用户，同时获取到用户下所有账户的信息
      */
     List<User> findAll();
+
+    /**
+     *  查询所有用户，同时获取到用户下所有角色的信息
+     * @return
+     */
+    List<User> findAllandRole();
 
     /**
      * 保存用户

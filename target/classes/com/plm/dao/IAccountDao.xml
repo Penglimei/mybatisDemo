@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 有 IUserDao.java的映射文件，就不需要再写 dao的实现类-->
+<mapper namespace="com.plm.dao.IAccountDao">
+
+    <!--
+        定义封装account 和 user 的resultMap
+
+            type属性：返回值的全限定类名，或者类型别名
+
+            一对一的关系映射，配置封装 user的内容
+
+                association标签：用来处理“一对一”的关系
+                    property属性：实体类属性名
+                    column属性：数据表的列名或者标签别名
+                    javaType属性：指定映射的Java实体类的属性
+                    select属性：唯一标志指定集合中元素加载方式
+
+             非延迟加载版
+             <resultMap id="accountUserMap" type="com.plm.domain.Account">
+                <id property="id" column="aid"></id>
+                <result property="uid" column="uid"></result>
+                <result property="money" column="money"></result>
+                <association property="user" column="uid" javaType="com.plm.domain.User">
+                    <id property="id" column="id"></id>
+                    <result property="username" column="username"></result>
+                    <result property="address" column="address"></result>
+                    <result property="sex" column="sex"></result>
+                    <result property="birthday" column="birthday"></result>
+                </association>
+              </resultMap>
+    -->
+    <!-- 延迟加载版 -->
+    <resultMap id="accountUserMap" type="com.plm.domain.Account">
+        <id property="id" column="id"></id>
+        <result property="uid" column="uid"></result>
+        <result property="money" column="money"></result>
+        <association property="user" column="uid" javaType="com.plm.domain.User"
+                     select="com.plm.dao.IUserDao.findById">
+        </association>
+    </resultMap>
+
+    <!--
+            查询所有账户信息，同时加载对应用户信息
+
+                非延迟加载的SQL语句：
+                     select u.*,a.id as aid, a.uid,a.money from user u,account a where a.uid=u.id;
+
+                延迟加载的SQL语句：
+     -->
+    <select id="findAll" resultMap="accountUserMap">
+        select * from account;
+    </select>
+
+    <!-- 根据account表中用户id uid查询 用户id对应的账户信息 -->
+    <select id="findAccountByUid" resultType="com.plm.domain.Account">
+        select * from account where uid=#{uid};
+    </select>
+
+</mapper>

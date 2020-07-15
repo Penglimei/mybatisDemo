@@ -2,10 +2,13 @@ package com.plm.domain;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 
 /**
  *  用户实体类
+ *
+ *      与账户实体 是 一对多的关系，一个用户对应多个账户
  */
 public class User implements Serializable {
 
@@ -14,6 +17,28 @@ public class User implements Serializable {
     private Date birthday;
     private String sex;
     private String address;
+
+    // 一对多关系映射，主表实体应该包含从表实体的集合引用
+    private List<Account> accounts;
+
+    // 多对多的关系映射，一个用户可以具备多个角色
+    private List<Role> roles;
+
+    public List<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(List<Role> roles) {
+        this.roles = roles;
+    }
+
+    public List<Account> getAccounts() {
+        return accounts;
+    }
+
+    public void setAccounts(List<Account> accounts) {
+        this.accounts = accounts;
+    }
 
     public Integer getId() {
         return id;
